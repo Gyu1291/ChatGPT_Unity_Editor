@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Networking;
+using System.Text;
 
 namespace AICommand {
 
@@ -10,7 +11,7 @@ static class OpenAIUtil
     {
         var msg = new OpenAI.RequestMessage();
         msg.role = "user";
-        msg.content = prompt;
+        msg.content = prompt; //prompt
 
         var req = new OpenAI.Request();
         req.model = "gpt-3.5-turbo";
@@ -22,15 +23,15 @@ static class OpenAIUtil
     public static string InvokeChat(string prompt)
     {
         var settings = AICommandSettings.instance;
+        using var post = UnityWebRequest.Post(OpenAI.Api.Url, CreateChatRequestBody(prompt)); //, "application/json"
 
-        // POST
-        using var post = UnityWebRequest.Post
-          (OpenAI.Api.Url, CreateChatRequestBody(prompt), "application/json");
-
-        // Request timeout setting
+        byte[] sendData = new UTF8Encoding().GetBytes(CreateChatRequestBody(prompt));
+        post.uploadHandler = new UploadHandlerRaw(sendData);
+            // Request timeout setting
         post.timeout = settings.timeout;
 
-        // API key authorization
+            // API key authorization
+        post.SetRequestHeader("Content-Type", "application/json");
         post.SetRequestHeader("Authorization", "Bearer " + settings.apiKey);
 
         // Request start
@@ -48,8 +49,11 @@ static class OpenAIUtil
 
         // Response extraction
         var json = post.downloadHandler.text;
+            Debug.Log($"{post.downloadHandler.text}");
         var data = JsonUtility.FromJson<OpenAI.Response>(json);
-        return data.choices[0].message.content;
+            Debug.Log($"{data}");
+            Debug.Log($"{data.choices[0].message.content}");
+            return data.choices[0].message.content;
     }
 }
 
