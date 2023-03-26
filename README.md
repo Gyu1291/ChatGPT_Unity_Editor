@@ -26,4 +26,4 @@ ChatGPT가 씬 동작을 위해 작성한 코드가 틀린 경우. 이 경우 �
 이런 방식으로 ChatGPT를 활용하기 위해서는 코드의 신뢰성을 보장받을 수 있는 작업이 필요하다.
 
 ## Examples
-![out](https://user-images.githubusercontent.com/343936/226172223-acfba006-8621-425f-a697-be745a94503f.gif)
+![out](https://github.com/Gyu1291/ChatGPT_Unity_Editor/blob/dev/ChatGPTUnity.gif)
